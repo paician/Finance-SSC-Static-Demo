@@ -17,7 +17,7 @@ python -m http.server 8765
 ## 檢查
 
 ```powershell
-node --check app-*.js
+Get-ChildItem app-*.js | ForEach-Object { node --check $_.FullName }
 node tools/verify.mjs
 ```
 

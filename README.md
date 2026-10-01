@@ -17,7 +17,7 @@ python -m http.server 8765
 ## 檢查
 
 ```powershell
-node --check app.js
+node --check app-*.js
 node tools/verify.mjs
 ```
 

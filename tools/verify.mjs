@@ -29,10 +29,8 @@ class MockFormData {
   constructor(form) { this.values = form.values; }
   get(key) { return this.values[key]; }
 }
-runInNewContext(readFileSync(new URL('../app.js', import.meta.url), 'utf8'), {
-  document, window, history, localStorage, URL, Date, Number, String, Array, JSON, MockFormData,
-  FormData: MockFormData
-});
+const context = { document, window, history, localStorage, URL, Date, Number, String, Array, JSON, MockFormData, FormData: MockFormData };
+for (let i = 1; i <= 6; i += 1) runInNewContext(readFileSync(new URL(`../app-${i}.js`, import.meta.url), 'utf8'), context);
 
 function visit(role, page = 'home') {
   location.href = `https://example.test/demo/?role=${role}&page=${page}`;

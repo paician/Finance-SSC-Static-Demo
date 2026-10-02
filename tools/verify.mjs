@@ -9,6 +9,9 @@ const app = { innerHTML: '', addEventListener: (name, callback) => appListeners.
 const location = { href: 'https://example.test/demo/?role=employee' };
 const document = {
   activeElement: null,
+  documentElement: { lang: '' },
+  title: '',
+  querySelector: () => null,
   getElementById: id => id === 'app' ? app : { scrollTo() {} }
 };
 const window = {
@@ -23,14 +26,18 @@ const history = {
 };
 const localStorage = {
   getItem: key => storage.get(key) ?? null,
-  setItem: (key, value) => storage.set(key, String(value))
+  setItem: (key, value) => storage.set(key, String(value)),
+  removeItem: key => storage.delete(key)
 };
 class MockFormData {
   constructor(form) { this.values = form.values; }
   get(key) { return this.values[key]; }
 }
-const context = { document, window, history, localStorage, URL, Date, Number, String, Array, JSON, MockFormData, FormData: MockFormData };
-for (let i = 1; i <= 6; i += 1) runInNewContext(readFileSync(new URL(`../app-${i}.js`, import.meta.url), 'utf8'), context);
+const navigator = { languages: ['zh-TW'], language: 'zh-TW' };
+const context = { document, window, history, localStorage, navigator, URL, Date, Number, String, Array, JSON, MockFormData, FormData: MockFormData };
+for (const file of ['messages.js', 'simplified.js', 'i18n.js', 'app.js']) {
+  runInNewContext(readFileSync(new URL(`../${file}`, import.meta.url), 'utf8'), context, { filename: file });
+}
 
 function visit(role, page = 'home') {
   location.href = `https://example.test/demo/?role=${role}&page=${page}`;

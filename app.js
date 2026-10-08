@@ -228,7 +228,7 @@
       ['公司卡問題', '包含申請、額度調整、交易查詢及遺失處理等常見問題。', 'credit', 'blue'],
       ['不知道找誰', '依申請類型找到對應的聯絡窗口與支援管道。', 'users', 'purple']
     ];
-    return ${card(`<div class="section-title"><div><h2>常見財務情境</h2><span>快速找到解決方案</span></div><button class="link-action" data-page="faq">查看更多 ${icon('chevron')}</button></div>
+    return card(`<div class="section-title"><div><h2>常見財務情境</h2><span>快速找到解決方案</span></div><button class="link-action" data-page="faq">查看更多 ${icon('chevron')}</button></div>
       <div class="finance-scenario-list">${items.map(([title, detail, ico, color]) => `<button type="button" data-page="faq"><span class="scenario-icon ${color}">${icon(ico)}</span><span><strong>${title}</strong><small>${detail}</small></span>${icon('chevron')}</button>`).join('')}</div>`, 'reference-card finance-scenarios')};
   }
 
@@ -238,7 +238,7 @@
       ['10 月費用報銷截止日', '10 月所有費用報銷申請請於 10/25 前送出。', '2026/09/22', 'service'],
       ['Helios 系統維護通知', '預計於 9/20 02:00–05:00（Malaysia Time）進行系統維護。', '2026/09/18', 'settings']
     ];
-    return ${card(`<div class="section-title"><div><h2>財務重要資訊</h2><span>掌握最新財務公告</span></div><button class="link-action" data-page="policy">查看更多 ${icon('chevron')}</button></div>
+    return card(`<div class="section-title"><div><h2>財務重要資訊</h2><span>掌握最新財務公告</span></div><button class="link-action" data-page="policy">查看更多 ${icon('chevron')}</button></div>
       <div class="finance-info-list">${items.map(([title, detail, date, ico]) => `<div class="finance-info-item"><span class="scenario-icon blue">${icon(ico)}</span><span><strong>${title}</strong><small>${detail}</small></span><time>${date}</time></div>`).join('')}</div>`, 'reference-card finance-important')};
   }
 
@@ -255,7 +255,7 @@
       ['馬來西亞', 3, 57],
       ['歐洲', 2, 38]
     ];
-    return ${card(`<div class="section-title travel-title"><div><h2>人員出差狀況</h2><span>以下為您所屬公司（${employeeContext.company}）目前的員工出差概況</span></div><button class="link-action" type="button">查看完整名單 ${icon('chevron')}</button></div>
+    return card(`<div class="section-title travel-title"><div><h2>人員出差狀況</h2><span>以下為您所屬公司（${employeeContext.company}）目前的員工出差概況</span></div><button class="link-action" type="button">查看完整名單 ${icon('chevron')}</button></div>
       <div class="travel-overview">
         <div class="travel-summary">
           <div class="travel-metrics">

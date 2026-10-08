@@ -111,9 +111,9 @@
     ['FSSC-20260705-001', '交通費', '機場接駁費', '2026/07/05', 'MYR 156.00', '已完成']
   ].map(([id, type, title, date, amount, status]) => ({ id, type, title, date, amount, status }));
   const financeCases = [
-    { id: 'SSC-2026-0930', person: '林怡君', type: '費用報銷', title: '專案交通費', amount: 'NT$ 1,860', date: '2026 / 09 / 30', status: '待審核' },
-    { id: 'SSC-2026-0929', person: '陳志明', type: '付款申請', title: '供應商服務費', amount: 'NT$ 24,500', date: '2026 / 09 / 29', status: '待審核' },
-    { id: 'SSC-2026-0927', person: '張雅婷', type: '預支款申請', title: '活動預支款', amount: 'NT$ 8,000', date: '2026 / 09 / 27', status: '處理中' }
+    { id: 'SSC-2026-0930', person: '林怡君', type: '費用報銷', title: '專案交通費', amount: 'MYR 241.80', date: '2026 / 09 / 30', status: '待審核' },
+    { id: 'SSC-2026-0929', person: '陳志明', type: '付款申請', title: '供應商服務費', amount: 'MYR 3,185.00', date: '2026 / 09 / 29', status: '待審核' },
+    { id: 'SSC-2026-0927', person: '張雅婷', type: '預支款申請', title: '活動預支款', amount: 'MYR 1,040.00', date: '2026 / 09 / 27', status: '處理中' }
   ];
   const statusCodes = { '進行中': 'in_progress', '處理中': 'in_progress', '已完成': 'completed', '需補件': 'needs_info', '已取消': 'cancelled', '待審核': 'pending' };
   const normalizeStatus = value => statusCodes[value] || value;
@@ -357,7 +357,7 @@
   }
   function financeReportPage(key) {
     const report = financeReports[key];
-    return `<div class="finance-report"><div class="finance-report-top"><button type="button" class="back-link" data-page="reports">← 返回總覽</button><span>最後更新：2026/09/30 09:30 (UTC+8)</span></div><div class="finance-report-heading"><div><h1>${report.title} <span>${report.en}</span></h1><p>${report.subtitle}</p></div><div class="finance-controls"><label>期間<select><option>本月 (2026/09)</option><option>上月 (2026/08)</option></select></label><label>幣別<select><option>USD</option><option>TWD (NT$)</option></select></label><label>範圍<select><option>全部 BU</option><option>BU-A</option><option>BU-B</option></select></label><button type="button" class="button button-primary" data-finance-filter>⚲ 進階篩選</button></div></div>
+    return `<div class="finance-report"><div class="finance-report-top"><button type="button" class="back-link" data-page="reports">← 返回總覽</button><span>最後更新：2026/09/30 09:30 (UTC+8)</span></div><div class="finance-report-heading"><div><h1>${report.title} <span>${report.en}</span></h1><p>${report.subtitle}</p></div><div class="finance-controls"><label>期間<select><option>本月 (2026/09)</option><option>上月 (2026/08)</option></select></label><label>幣別<select><option>MYR</option><option>USD</option></select></label><label>範圍<select><option>全部 BU</option><option>BU-A</option><option>BU-B</option></select></label><button type="button" class="button button-primary" data-finance-filter>⚲ 進階篩選</button></div></div>
       ${financeMetrics(report.metrics)}<div class="finance-report-grid"><section class="finance-panel chart-panel"><h2>${report.chart} <small>${report.chartEn}</small></h2><div class="chart-legend"><span>● 本年</span><span>● 去年</span><span>● 預算</span></div>${financeChart(report.values)}</section><section class="finance-panel donut-panel"><h2>${report.pie} <small>${report.pieEn}</small></h2>${financeDonut(report.segments, report.metrics[0][2])}</section></div>
       <div class="finance-report-grid lower"><section class="finance-panel"><h2>${report.table} <small>${report.tableEn}</small></h2>${financeTable(key)}</section><section class="finance-panel insights"><h2>關鍵洞察 <small>Key Insights</small></h2>${report.insight.map((text,index) => `<div class="insight"><span class="insight-icon ${['green','blue','purple'][index]}">${icon(index === 0 ? 'arrow' : index === 1 ? 'report' : 'info')}</span><p>${text}</p></div>`).join('')}</section></div></div>`;
   }

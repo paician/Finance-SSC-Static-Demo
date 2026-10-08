@@ -163,7 +163,7 @@ input::placeholder { color: #6f87b6; opacity: 1; }
 
 
 /* Employee Home V4 — company-aware Finance SSC concept */
-.employee-home-v4 { display: grid; gap: 16px; }
+.employee-home-v4 { display: grid; gap: 16px; container-type: inline-size; }
 .home-hero-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(360px, .95fr); gap: 16px; }
 .employee-home-v4 .home-reference-grid { grid-template-columns: minmax(0, 2fr) minmax(340px, .95fr); align-items: start; }
 .employee-home-v4 .home-primary { gap: 14px; }
@@ -289,4 +289,89 @@ input::placeholder { color: #6f87b6; opacity: 1; }
   .employee-home-v4 .reference-service-grid { grid-template-columns: 1fr; }
   .company-flow-grid { grid-template-columns: 1fr; }
   .finance-info-item time { display: none; }
+}
+
+
+/* Employee Home responsive hardening — prevent English copy from overflowing sibling columns */
+.employee-home-v4 .home-primary,
+.employee-home-v4 .home-secondary,
+.employee-home-v4 .reference-card,
+.employee-home-v4 .reference-service,
+.employee-home-v4 .company-flow-tile,
+.employee-home-v4 .home-status,
+.employee-home-v4 .identity-item,
+.employee-home-v4 .finance-scenario-list button,
+.employee-home-v4 .finance-info-item {
+  min-width: 0;
+}
+.employee-home-v4 .section-title > div:first-child:not(.assistant-title-icon) {
+  min-width: 0;
+  flex: 1;
+}
+.employee-home-v4 .section-title h2,
+.employee-home-v4 .section-title span,
+.employee-home-v4 .reference-service strong,
+.employee-home-v4 .reference-service small,
+.employee-home-v4 .company-flow-tile strong,
+.employee-home-v4 .home-status strong,
+.employee-home-v4 .identity-item strong,
+.employee-home-v4 .finance-scenario-list strong,
+.employee-home-v4 .finance-scenario-list small,
+.employee-home-v4 .finance-info-item strong,
+.employee-home-v4 .finance-info-item small {
+  overflow-wrap: anywhere;
+}
+.employee-home-v4 .reference-service,
+.employee-home-v4 .company-flow-tile,
+.employee-home-v4 .home-status {
+  overflow: hidden;
+}
+
+/* Use the actual Employee Home content width rather than viewport width.
+   This also behaves correctly when browser zoom changes the effective CSS viewport. */
+@container (max-width: 1180px) {
+  .employee-home-v4 .home-reference-grid {
+    grid-template-columns: 1fr;
+  }
+  .employee-home-v4 .home-secondary {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+}
+@container (max-width: 980px) {
+  .employee-home-v4 .home-hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .employee-home-v4 .home-status-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+  .employee-home-v4 .company-flow-grid {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+}
+@container (max-width: 760px) {
+  .employee-home-v4 .home-secondary {
+    grid-template-columns: 1fr;
+  }
+  .employee-home-v4 .reference-service-grid {
+    grid-template-columns: 1fr;
+  }
+  .employee-home-v4 .company-flow-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+  .employee-home-v4 .section-title {
+    align-items: flex-start;
+  }
+  .employee-home-v4 .section-title > div:first-child:not(.assistant-title-icon) {
+    display: block;
+  }
+  .employee-home-v4 .section-title span {
+    display: block;
+    margin-top: 4px;
+  }
+}
+@container (max-width: 520px) {
+  .employee-home-v4 .home-status-grid,
+  .employee-home-v4 .company-flow-grid {
+    grid-template-columns: 1fr;
+  }
 }

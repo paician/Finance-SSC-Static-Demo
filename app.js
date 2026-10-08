@@ -229,7 +229,7 @@
       ['不知道找誰', '依申請類型找到對應的聯絡窗口與支援管道。', 'users', 'purple']
     ];
     return card(`<div class="section-title"><div><h2>常見財務情境</h2><span>快速找到解決方案</span></div><button class="link-action" data-page="faq">查看更多 ${icon('chevron')}</button></div>
-      <div class="finance-scenario-list">${items.map(([title, detail, ico, color]) => `<button type="button" data-page="faq"><span class="scenario-icon ${color}">${icon(ico)}</span><span><strong>${title}</strong><small>${detail}</small></span>${icon('chevron')}</button>`).join('')}</div>`, 'reference-card finance-scenarios')};
+      <div class="finance-scenario-list">${items.map(([title, detail, ico, color]) => `<button type="button" data-page="faq"><span class="scenario-icon ${color}">${icon(ico)}</span><span><strong>${title}</strong><small>${detail}</small></span>${icon('chevron')}</button>`).join('')}</div>`, 'reference-card finance-scenarios');
   }
 
   function financeInfoCard() {
@@ -239,7 +239,7 @@
       ['Helios 系統維護通知', '預計於 9/20 02:00–05:00（Malaysia Time）進行系統維護。', '2026/09/18', 'settings']
     ];
     return card(`<div class="section-title"><div><h2>財務重要資訊</h2><span>掌握最新財務公告</span></div><button class="link-action" data-page="policy">查看更多 ${icon('chevron')}</button></div>
-      <div class="finance-info-list">${items.map(([title, detail, date, ico]) => `<div class="finance-info-item"><span class="scenario-icon blue">${icon(ico)}</span><span><strong>${title}</strong><small>${detail}</small></span><time>${date}</time></div>`).join('')}</div>`, 'reference-card finance-important')};
+      <div class="finance-info-list">${items.map(([title, detail, date, ico]) => `<div class="finance-info-item"><span class="scenario-icon blue">${icon(ico)}</span><span><strong>${title}</strong><small>${detail}</small></span><time>${date}</time></div>`).join('')}</div>`, 'reference-card finance-important');
   }
 
   function employeeTravelStatus() {
@@ -268,7 +268,7 @@
         <div class="traveller-panel"><div class="traveller-panel-head"><strong>目前出差員工 <small>（最近出發）</small></strong><button class="link-action" type="button">查看全部 ${icon('chevron')}</button></div>
           <div class="traveller-list">${travellers.map(([initials, name, destination, dates]) => `<div class="traveller-row"><span class="traveller-avatar">${initials}</span><strong>${name}</strong><span>${destination}</span><time>${dates}</time><b>出差中</b></div>`).join('')}</div>
         </div>
-      </div>`, 'reference-card employee-travel-status')};
+      </div>`, 'reference-card employee-travel-status');
   }
 
   function referenceEmployeeHome() {

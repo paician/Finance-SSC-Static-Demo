@@ -22,6 +22,7 @@
     close: '<path d="M5 5 19 19M19 5 5 19"/>',
     check: '<path d="m4 12 5 5L20 6"/>',
     info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+    alert: '<path d="M12 3 2.7 20h18.6L12 3z"/><path d="M12 9v4M12 17h.01"/>',
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     upload: '<path d="M12 16V3m-5 5 5-5 5 5M4 16v4h16v-4"/>',
     users: '<circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M17 5a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/>',
@@ -261,7 +262,7 @@
           <div class="travel-metrics">
             <div class="travel-metric"><span class="travel-metric-icon blue">${icon('plane')}</span><div><small>出差中人數</small><strong>12 <em>人</em></strong><span class="trend-up">↑ 20% <i>較上月同期</i></span></div></div>
             <div class="travel-metric"><span class="travel-metric-icon blue">${icon('pin')}</span><div><small>涵蓋地區</small><strong>4 <em>個</em></strong><span class="trend-neutral">-- <i>本次出差涵蓋地區數</i></span></div></div>
-            <div class="travel-metric"><span class="travel-metric-icon red">${icon('info')}</span><div><small>待審批申請</small><strong>3 <em>件</em></strong><span class="trend-alert">↑ 50% <i>較上月同期</i></span></div></div>
+            <div class="travel-metric"><span class="travel-metric-icon red">${icon('alert')}</span><div><small>待審批申請</small><strong>3 <em>件</em></strong><span class="trend-alert">↑ 50% <i>較上月同期</i></span></div></div>
           </div>
           <div class="travel-bars"><strong>出差地區分佈</strong>${destinations.map(([name, count, width]) => `<div class="travel-bar-row"><span>${name}</span><div class="travel-bar"><i style="width:${width}%"></i></div><b>${count} 人</b></div>`).join('')}</div>
         </div>

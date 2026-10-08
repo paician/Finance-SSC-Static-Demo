@@ -220,7 +220,8 @@ input::placeholder { color: #6f87b6; opacity: 1; }
 .travel-summary { min-width: 0; }
 .travel-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; }
 .travel-metric { min-width: 0; min-height: 93px; display: flex; gap: 10px; align-items: center; border: 1px solid #e0ecfb; border-radius: 8px; padding: 11px; background: #fff; }
-.travel-metric-icon { width: 42px; height: 42px; flex: none; display: grid; place-items: center; border-radius: 50%; }
+.travel-metric .travel-metric-icon { width: 48px; height: 48px; min-width: 48px; min-height: 48px; flex: none; display: grid; place-items: center; border-radius: 50%; line-height: 1; }
+.travel-metric .travel-metric-icon .icon { width: 24px; height: 24px; display: block; margin: 0; }
 .travel-metric-icon.blue { color: #1974f8; background: #e7f2ff; }
 .travel-metric-icon.red { color: #ff4f55; background: #ffecee; }
 .travel-metric small,.travel-metric strong,.travel-metric span { display: block; }

@@ -214,7 +214,10 @@ input::placeholder { color: #6f87b6; opacity: 1; }
 .finance-info-item { grid-template-columns: 43px minmax(0,1fr) auto; }
 .finance-info-item time { align-self: start; color: #7f93b9; font-size: 10px; white-space: nowrap; }
 
-.employee-travel-status { padding: 15px 18px; }
+.employee-travel-status { padding: 15px 18px; container-type: inline-size; }
+.travel-title > div:first-child { min-width: 0; flex: 1; }
+.travel-title h2 { white-space: nowrap; }
+.travel-title .link-action { flex: none; }
 .travel-title { margin-bottom: 12px; }
 .travel-overview { display: grid; grid-template-columns: minmax(0,1.45fr) minmax(330px,.9fr); gap: 12px; }
 .travel-summary { min-width: 0; }
@@ -251,6 +254,20 @@ input::placeholder { color: #6f87b6; opacity: 1; }
 .traveller-row b { justify-self: end; padding: 4px 7px; border-radius: 10px; color: #00a96e; background: #dcf8eb; font-size: 9px; white-space: nowrap; }
 
 .faq-only-card { max-width: 980px; }
+
+@container (max-width: 900px) {
+  .employee-travel-status .travel-overview { grid-template-columns: 1fr; }
+  .employee-travel-status .travel-summary { min-width: 0; }
+  .employee-travel-status .traveller-panel { width: 100%; }
+}
+@container (max-width: 620px) {
+  .employee-travel-status .travel-title { align-items: flex-start; gap: 8px; }
+  .employee-travel-status .travel-title h2 { white-space: normal; }
+  .employee-travel-status .travel-metrics { grid-template-columns: 1fr; }
+  .employee-travel-status .travel-metric { min-height: 82px; }
+  .employee-travel-status .traveller-row { grid-template-columns: 29px 82px minmax(0,1fr) 46px; }
+  .employee-travel-status .traveller-row time { display: none; }
+}
 
 @media(max-width:1200px) {
   .home-hero-grid { grid-template-columns: 1fr; }

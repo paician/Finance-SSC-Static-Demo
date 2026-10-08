@@ -59,6 +59,18 @@
     ]
   };
   const employeeContext = Object.freeze({ company: 'Malaysia Entity A', country: 'Malaysia', department: 'Sales' });
+  const EMPLOYEE_DEMO_TWD_TO_MYR = 0.13;
+  const formatMyr = value => `MYR ${Number(value).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const convertTwdAmountToMyr = value => formatMyr(Number(value) * EMPLOYEE_DEMO_TWD_TO_MYR);
+  const normalizeEmployeeAmount = value => {
+    const text = String(value ?? '').trim();
+    if (/^MYR\s/i.test(text)) return text;
+    if (/^NT\$\s*/i.test(text)) {
+      const numeric = Number(text.replace(/^NT\$\s*/i, '').replaceAll(',', ''));
+      return Number.isFinite(numeric) ? convertTwdAmountToMyr(numeric) : text;
+    }
+    return text;
+  };
   const services = [
     { id: 'expense', title: '費用報銷', description: '提交差旅、交通及其他業務相關費用。', category: '費用與報銷', time: '約 3 個工作天', icon: 'service' },
     { id: 'travel', title: '出差申請', description: '辦理國內或國外出差申請。', category: '差旅服務', time: '約 3 個工作天', icon: 'arrow' },
@@ -79,24 +91,24 @@
     { q: '申請被退回時該怎麼辦？', a: '請查看退回原因、補齊資料後重新提交。本靜態展示不連接任何真實審核系統。', tag: '申請進度' }
   ];
   const initialApplications = [
-    ['FSSC-20261004-001', '機票費', '台北－新加坡 業務出差', '2026/10/04', 'NT$ 12,500', '進行中'],
-    ['FSSC-20261002-003', '住宿費', '新加坡出差 4 晚', '2026/10/02', 'NT$ 18,800', '進行中'],
-    ['FSSC-20261001-002', '交通費', '機場往返及當地交通', '2026/10/01', 'NT$ 3,280', '需補件'],
-    ['FSSC-20260928-001', '業務招待費', '客戶會議餐費', '2026/09/28', 'NT$ 6,500', '已完成'],
-    ['FSSC-20260920-004', '其他費用', '電話／網路費', '2026/09/20', 'NT$ 1,980', '已完成'],
-    ['FSSC-20260915-002', '機票費', '台北－東京 業務出差', '2026/09/15', 'NT$ 21,300', '已完成'],
-    ['FSSC-20260910-001', '廠商付款', '系統維護費用', '2026/09/10', 'NT$ 150,000', '已取消'],
-    ['FSSC-20260905-003', '住宿費', '台北出差住宿費', '2026/09/05', 'NT$ 4,200', '已完成'],
-    ['FSSC-20260828-001', '業務招待費', '部門聚餐費用', '2026/08/28', 'NT$ 8,600', '已取消'],
-    ['FSSC-20260820-002', '機票費', '台北－大阪 業務出差', '2026/08/20', 'NT$ 16,500', '已完成'],
-    ['FSSC-20260815-001', '交通費', '客戶拜訪計程車費', '2026/08/15', 'NT$ 1,680', '已完成'],
-    ['FSSC-20260812-002', '住宿費', '高雄出差住宿費', '2026/08/12', 'NT$ 3,600', '已完成'],
-    ['FSSC-20260808-001', '廠商付款', '軟體授權費', '2026/08/08', 'NT$ 42,000', '進行中'],
-    ['FSSC-20260803-001', '交通費', '外部會議交通費', '2026/08/03', 'NT$ 980', '已完成'],
-    ['FSSC-20260728-002', '其他費用', '辦公用品', '2026/07/28', 'NT$ 2,450', '已完成'],
-    ['FSSC-20260720-001', '機票費', '台北－香港 業務出差', '2026/07/20', 'NT$ 10,800', '已完成'],
-    ['FSSC-20260712-003', '住宿費', '香港出差住宿費', '2026/07/12', 'NT$ 6,800', '已完成'],
-    ['FSSC-20260705-001', '交通費', '機場接駁費', '2026/07/05', 'NT$ 1,200', '已完成']
+    ['FSSC-20261004-001', '機票費', '台北－新加坡 業務出差', '2026/10/04', 'MYR 1,625.00', '進行中'],
+    ['FSSC-20261002-003', '住宿費', '新加坡出差 4 晚', '2026/10/02', 'MYR 2,444.00', '進行中'],
+    ['FSSC-20261001-002', '交通費', '機場往返及當地交通', '2026/10/01', 'MYR 426.40', '需補件'],
+    ['FSSC-20260928-001', '業務招待費', '客戶會議餐費', '2026/09/28', 'MYR 845.00', '已完成'],
+    ['FSSC-20260920-004', '其他費用', '電話／網路費', '2026/09/20', 'MYR 257.40', '已完成'],
+    ['FSSC-20260915-002', '機票費', '台北－東京 業務出差', '2026/09/15', 'MYR 2,769.00', '已完成'],
+    ['FSSC-20260910-001', '廠商付款', '系統維護費用', '2026/09/10', 'MYR 19,500.00', '已取消'],
+    ['FSSC-20260905-003', '住宿費', '台北出差住宿費', '2026/09/05', 'MYR 546.00', '已完成'],
+    ['FSSC-20260828-001', '業務招待費', '部門聚餐費用', '2026/08/28', 'MYR 1,118.00', '已取消'],
+    ['FSSC-20260820-002', '機票費', '台北－大阪 業務出差', '2026/08/20', 'MYR 2,145.00', '已完成'],
+    ['FSSC-20260815-001', '交通費', '客戶拜訪計程車費', '2026/08/15', 'MYR 218.40', '已完成'],
+    ['FSSC-20260812-002', '住宿費', '高雄出差住宿費', '2026/08/12', 'MYR 468.00', '已完成'],
+    ['FSSC-20260808-001', '廠商付款', '軟體授權費', '2026/08/08', 'MYR 5,460.00', '進行中'],
+    ['FSSC-20260803-001', '交通費', '外部會議交通費', '2026/08/03', 'MYR 127.40', '已完成'],
+    ['FSSC-20260728-002', '其他費用', '辦公用品', '2026/07/28', 'MYR 318.50', '已完成'],
+    ['FSSC-20260720-001', '機票費', '台北－香港 業務出差', '2026/07/20', 'MYR 1,404.00', '已完成'],
+    ['FSSC-20260712-003', '住宿費', '香港出差住宿費', '2026/07/12', 'MYR 884.00', '已完成'],
+    ['FSSC-20260705-001', '交通費', '機場接駁費', '2026/07/05', 'MYR 156.00', '已完成']
   ].map(([id, type, title, date, amount, status]) => ({ id, type, title, date, amount, status }));
   const financeCases = [
     { id: 'SSC-2026-0930', person: '林怡君', type: '費用報銷', title: '專案交通費', amount: 'NT$ 1,860', date: '2026 / 09 / 30', status: '待審核' },
@@ -114,7 +126,7 @@
   function loadApplications() {
     try {
       const saved = JSON.parse(localStorage.getItem(APPLICATIONS_KEY));
-      return Array.isArray(saved) ? [...saved.map(item => ({ ...item, status: normalizeStatus(item.status), type: normalizeType(item.type) })), ...initialApplications] : initialApplications;
+      return Array.isArray(saved) ? [...saved.map(item => ({ ...item, amount: normalizeEmployeeAmount(item.amount), status: normalizeStatus(item.status), type: normalizeType(item.type) })), ...initialApplications] : initialApplications;
     } catch { return initialApplications; }
   }
   function getStoredRole() {
@@ -294,7 +306,7 @@
     </div>`;
   }
   function referenceApplicationTable(rows, home = false) {
-    return `<div class="table-scroll"><table class="reference-table"><thead><tr><th>申請單號</th><th>${home ? '申請類型' : '申請項目'}</th>${home ? '' : '<th>申請目的</th>'}<th>申請日期</th>${home ? '<th>金額</th>' : ''}<th>狀態</th>${home ? '' : '<th>預計完成日</th>'}<th>操作</th></tr></thead><tbody>${rows.map(item => `<tr><td class="reference-id">${escapeHtml(item.id)}</td><td>${escapeHtml(t(`type.${home ? (item.type === 'airfare' || item.type === 'lodging' ? 'travel' : item.type === 'vendor_payment' ? 'payment' : 'expense') : item.type}`))}</td>${home ? '' : `<td>${escapeHtml(item.title)}</td>`}<td>${escapeHtml(item.date)}</td>${home ? `<td>${escapeHtml(item.amount)}</td>` : ''}<td>${badge(item.status)}</td>${home ? '' : `<td>${item.status === 'cancelled' ? '－' : '2026/10/08'}</td>`}<td><button class="row-link" type="button" data-application="${escapeHtml(item.id)}">${home ? '查看' : '查看詳情'} ${home ? '' : icon('chevron')}</button></td></tr>`).join('')}</tbody></table></div>`;
+    return `<div class="table-scroll"><table class="reference-table"><thead><tr><th>申請單號</th><th>${home ? '申請類型' : '申請項目'}</th>${home ? '' : '<th>申請目的</th>'}<th>申請日期</th>${home ? '<th>金額 (MYR)</th>' : ''}<th>狀態</th>${home ? '' : '<th>預計完成日</th>'}<th>操作</th></tr></thead><tbody>${rows.map(item => `<tr><td class="reference-id">${escapeHtml(item.id)}</td><td>${escapeHtml(t(`type.${home ? (item.type === 'airfare' || item.type === 'lodging' ? 'travel' : item.type === 'vendor_payment' ? 'payment' : 'expense') : item.type}`))}</td>${home ? '' : `<td>${escapeHtml(item.title)}</td>`}<td>${escapeHtml(item.date)}</td>${home ? `<td>${escapeHtml(item.amount)}</td>` : ''}<td>${badge(item.status)}</td>${home ? '' : `<td>${item.status === 'cancelled' ? '－' : '2026/10/08'}</td>`}<td><button class="row-link" type="button" data-application="${escapeHtml(item.id)}">${home ? '查看' : '查看詳情'} ${home ? '' : icon('chevron')}</button></td></tr>`).join('')}</tbody></table></div>`;
   }
   function referencePolicyPage() {
     const visible = policies.filter(item => matchesSearch(`${item.title} ${item.text}`));
@@ -317,7 +329,7 @@
     return `${employeeBanner('申請服務', '從常用服務選擇您的需求，快速開始財務申請。', '報銷、出差與付款申請皆為靜態示範流程。')}
       ${card(`<div class="section-title stacked"><div><h2>常用服務</h2><span>申請各項財務服務，提升工作效率</span></div></div>${referenceServiceTiles()}`, 'reference-card service-reference-section')}
       ${card(`<div class="service-guide"><span class="guide-icon">${icon('info')}</span><div><h2>員工先從首頁找到申請入口</h2><p>點選「報銷申請／出差申請／付款申請」後，在本展示中建立一筆示範申請。實際環境會導向 Helios 完成送件。</p></div></div>`, 'reference-card service-guide-card')}
-      ${selected ? `<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-head"><div><span class="eyebrow">DEMO APPLICATION</span><h2 id="modal-title">${selected.title}</h2></div><button class="icon-button" data-close-modal aria-label="關閉">${icon('close')}</button></div><p>${selected.description}</p><form id="application-form" novalidate><input type="hidden" name="service" value="${selected.id}"><label>申請主旨<input name="title" maxlength="60" required placeholder="請輸入示範申請主旨"></label><label>金額（新臺幣）<input name="amount" type="number" min="1" max="9999999" required placeholder="0"></label><label>說明<textarea name="description" maxlength="300" rows="3" placeholder="簡述申請內容（選填）"></textarea></label><div class="modal-note">${icon('info')}資料僅儲存在本機瀏覽器，不會送出至任何系統。</div><div class="modal-actions"><button type="button" class="button button-outline" data-close-modal>取消</button><button type="submit" class="button button-primary">建立示範申請 ${icon('arrow')}</button></div></form></section></div>` : ''}`;
+      ${selected ? `<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-head"><div><span class="eyebrow">DEMO APPLICATION</span><h2 id="modal-title">${selected.title}</h2></div><button class="icon-button" data-close-modal aria-label="關閉">${icon('close')}</button></div><p>${selected.description}</p><form id="application-form" novalidate><input type="hidden" name="service" value="${selected.id}"><label>申請主旨<input name="title" maxlength="60" required placeholder="請輸入示範申請主旨"></label><label>金額（MYR）<input name="amount" type="number" min="1" max="9999999" required placeholder="0"></label><label>說明<textarea name="description" maxlength="300" rows="3" placeholder="簡述申請內容（選填）"></textarea></label><div class="modal-note">${icon('info')}資料僅儲存在本機瀏覽器，不會送出至任何系統。</div><div class="modal-actions"><button type="button" class="button button-outline" data-close-modal>取消</button><button type="submit" class="button button-primary">建立示範申請 ${icon('arrow')}</button></div></form></section></div>` : ''}`;
   }
   const financeReports = {
     revenue: { title: '本月營收', en: 'Revenue Overview', subtitle: '掌握本月營收表現，分析成長趨勢、BU 與產品貢獻，並與預算及去年同期比較。', metrics: [['本月營收','Total Revenue','USD 1.25M','↑ 5%','blue'],['上月營收','Last Month','USD 1.19M','較上月 (Aug)','purple'],['去年同期','Same Period Last Year','USD 1.05M','↑ 19%','teal'],['年度目標達成率','YTD Budget Achievement','68%','YTD 營收 USD 9.8M','pink']], chart: '營收趨勢', chartEn: 'Revenue Trend', pie: '營收構成', pieEn: 'Revenue Breakdown', table: 'BU 營收排名', tableEn: 'Revenue by BU', values: [130,125,155,175,188,182,200,230,228,240,255,285], segments: [['BU-A',28],['BU-B',24],['BU-C',18],['BU-D',16],['BU-E',10],['其他',4]], insight: ['本月營收較上月成長 5%，主要來自 BU-A 與 BU-C 的營收增加。','累計營收達成年度預算 68%，進度符合預期。','Product A 持續保持最高營收貢獻。'] },
@@ -426,7 +438,7 @@
       if (!Number.isFinite(amount) || amount < 1 || amount > 9999999) { showToast(t('validation.amount')); return; }
       const saved = (() => { try { const value = JSON.parse(localStorage.getItem(APPLICATIONS_KEY)); return Array.isArray(value) ? value : []; } catch { return []; } })();
       const today = new Date();
-      saved.unshift({ id: `FSSC-DEMO-${String(Date.now()).slice(-8)}`, type: service.id, title: title.slice(0, 60), date: `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`, amount: `NT$ ${amount.toLocaleString('zh-TW')}`, status: 'in_progress' });
+      saved.unshift({ id: `FSSC-DEMO-${String(Date.now()).slice(-8)}`, type: service.id, title: title.slice(0, 60), date: `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`, amount: formatMyr(amount), status: 'in_progress' });
       try { localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(saved)); } catch { /* storage unavailable */ }
       setRoute('employee', 'applications'); showToast('已建立示範申請');
     }

@@ -237,10 +237,10 @@ input::placeholder { color: #6f87b6; opacity: 1; }
 .travel-metric span i { color: #7a90b8; font-style: normal; margin-left: 5px; }
 .travel-bars { margin-top: 10px; }
 .travel-bars > strong { display: block; margin-bottom: 5px; font-size: 12px; }
-.travel-bar-row { display: grid; grid-template-columns: 58px minmax(0,1fr) 40px; gap: 8px; align-items: center; min-height: 18px; font-size: 11px; color: #4d6b9d; }
+.travel-bar-row { display: grid; grid-template-columns: 78px minmax(0,1fr) 68px; gap: 8px; align-items: center; min-height: 18px; font-size: 11px; color: #4d6b9d; }
 .travel-bar { height: 8px; border-radius: 8px; background: #e3edf8; overflow: hidden; }
 .travel-bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#6cb4ff,#2b7cf4); }
-.travel-bar-row b { color: var(--navy); font-size: 11px; }
+.travel-bar-row b { color: var(--navy); font-size: 11px; white-space: nowrap; text-align: left; }
 
 .traveller-panel { border: 1px solid #e0ecfb; border-radius: 8px; background: #fff; min-width: 0; padding: 10px 12px; }
 .traveller-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 5px; }
@@ -267,6 +267,48 @@ input::placeholder { color: #6f87b6; opacity: 1; }
   .employee-travel-status .travel-metric { min-height: 82px; }
   .employee-travel-status .traveller-row { grid-template-columns: 29px 82px minmax(0,1fr) 46px; }
   .employee-travel-status .traveller-row time { display: none; }
+}
+
+
+@container (max-width: 620px) {
+  .employee-travel-status .travel-bars { margin-top: 12px; }
+  .employee-travel-status .travel-bar-row {
+    grid-template-columns: 70px minmax(0,1fr) 58px;
+    gap: 6px;
+    min-height: 22px;
+    font-size: 10px;
+  }
+  .employee-travel-status .travel-bar-row b {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+}
+@container (max-width: 420px) {
+  .employee-travel-status { padding: 12px; }
+  .employee-travel-status .travel-bar-row {
+    grid-template-columns: 64px minmax(0,1fr) 52px;
+    gap: 5px;
+  }
+  .employee-travel-status .travel-bar {
+    height: 7px;
+  }
+  .employee-travel-status .traveller-panel {
+    padding: 8px 9px;
+  }
+  .employee-travel-status .traveller-row {
+    grid-template-columns: 27px minmax(70px,.9fr) minmax(0,1fr) 44px;
+    gap: 5px;
+    font-size: 9px;
+  }
+  .employee-travel-status .traveller-row > span:nth-child(3) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .employee-travel-status .traveller-row b {
+    padding: 3px 5px;
+    font-size: 8px;
+  }
 }
 
 @media(max-width:1200px) {

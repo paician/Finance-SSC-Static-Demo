@@ -145,7 +145,7 @@
     '員工先從首頁找到申請入口': 'Find an application from Home',
     '點選「報銷申請／出差申請／付款申請」後，在本展示中建立一筆示範申請。實際環境會導向 Helios 完成送件。': 'Choose reimbursement, travel, or payment to create a demo application. A real environment would submit through Helios.',
     '關閉': 'Close', '申請主旨': 'Application Title', '請輸入示範申請主旨': 'Enter a demo application title',
-    '金額（新臺幣）': 'Amount (TWD)', '金額（MYR）': 'Amount (MYR)', '金額 (MYR)': 'Amount (MYR)', '說明': 'Description', '簡述申請內容（選填）': 'Brief description (optional)',
+    '金額（馬來西亞令吉）': 'Amount (MYR)', '金額（MYR）': 'Amount (MYR)', '金額 (MYR)': 'Amount (MYR)', '說明': 'Description', '簡述申請內容（選填）': 'Brief description (optional)',
     '資料僅儲存在本機瀏覽器，不會送出至任何系統。': 'Data stays in this browser and is not sent to any system.',
     '取消': 'Cancel', '建立示範申請': 'Create Demo Application',
     '費用報銷需要準備哪些附件？': 'What attachments are needed for reimbursement?',

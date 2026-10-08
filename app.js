@@ -29,7 +29,10 @@
     ,plane: '<path d="m21 3-7.5 8.5 2 7-2.5 2-4-6-5 2-2-2.5 6-4L5.5 6l2-2.5 7 2L21 3z"/>',
     receipt: '<path d="M5 3h14v18l-3-2-4 2-4-2-3 2zM9 8h6M9 12h6M9 16h3"/>',
     credit: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/>',
-    book: '<path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1zM12 6v14"/>'
+    book: '<path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1zM12 6v14"/>',
+    building: '<path d="M4 21V6l8-3 8 3v15M8 9h2M14 9h2M8 13h2M14 13h2M8 17h2M14 17h2M2 21h20"/>',
+    globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+    pin: '<path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/>'
   };
   const icon = (name, className = '') => `<svg class="icon ${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name]}</svg>`;
   const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
@@ -39,7 +42,7 @@
       ['service', '申請服務', 'Application Service', '開始申請'],
       ['applications', '我的申請', 'My Applications', '追蹤進度'],
       ['policy', '財務政策', 'Finance Policy', '理解規範'],
-      ['faq', 'FAQ / AI 助手', 'FAQ / AI Assistant', '取得解答']
+      ['faq', 'FAQ', 'FAQ', '取得解答']
     ],
     finance: [
       ['home', '首頁', 'Home', '掌握工作'],
@@ -54,6 +57,7 @@
       ['policy', '資料中心', 'Data Center', '檢視資料']
     ]
   };
+  const employeeContext = Object.freeze({ company: 'Malaysia Entity A', country: 'Malaysia', department: 'Sales' });
   const services = [
     { id: 'expense', title: '費用報銷', description: '提交差旅、交通及其他業務相關費用。', category: '費用與報銷', time: '約 3 個工作天', icon: 'service' },
     { id: 'travel', title: '出差申請', description: '辦理國內或國外出差申請。', category: '差旅服務', time: '約 3 個工作天', icon: 'arrow' },
@@ -153,7 +157,7 @@
     const current = nav[state.role].find(item => item[0] === state.page);
     const name = 'Evren';
     const initials = 'E';
-    const roleLabel = state.role === 'finance' ? 'Finance' : 'Employee';
+    const roleLabel = state.role === 'finance' ? '財務人員 Finance' : '一般員工 Employee';
     return `<div class="app-shell ${state.mobileOpen ? 'nav-open' : ''}">
       <aside class="sidebar" aria-label="主要導覽">
         <div class="brand"><span class="brand-mark"><i></i><i></i><i></i><i></i></span><strong>Finance SSC</strong></div>
@@ -188,22 +192,105 @@
   }
   function faqPage() {
     const visible = faqs.filter(item => matchesSearch(`${item.q} ${item.a} ${item.tag}`));
-    return `${pageTitle('FAQ / AI ASSISTANT', '常見問題／AI 助理', '先找常見解答，或使用示範助理取得導覽建議。')}
-       <div class="faq-layout"><section>${card(`<div class="card-heading"><div><h2>常見問題</h2><p>快速找到解答</p></div></div><label class="search-box full">${icon('search')}<input id="content-search" type="search" placeholder="搜尋常見問題" value="${escapeHtml(state.search)}" aria-label="搜尋常見問題"></label><div class="faq-list">${visible.length ? visible.map((item, index) => `<div class="faq-item"><button type="button" data-faq-index="${faqs.indexOf(item)}" aria-expanded="${state.faqOpen === faqs.indexOf(item)}"><span><small>${item.tag}</small><strong>${item.q}</strong></span><span class="faq-plus">${state.faqOpen === faqs.indexOf(item) ? '−' : '+'}</span></button>${state.faqOpen === faqs.indexOf(item) ? `<p>${item.a}</p>` : ''}</div>`).join('') : '<p class="empty-state">沒有找到符合的問題。</p>'}</div>`, 'faq-card')}</section><section>${card(`<div class="assistant-heading"><span class="assistant-mark">${icon('ask')}</span><div><h2>Finance SSC 助理</h2><p>示範導覽，不連接 AI 服務</p></div></div><div class="chat-messages" id="chat-messages"><div class="chat-message bot">您好！我可以協助您找到財務政策、申請服務與進度查詢入口。</div>${state.assistant.map(message => `<div class="chat-message user">${escapeHtml(message.user)}</div><div class="chat-message bot">${escapeHtml(message.reply)}</div>`).join('')}</div><div class="suggestions"><button data-suggestion="如何申請費用報銷？">費用報銷</button><button data-suggestion="如何追蹤申請？">申請進度</button></div><form id="assistant-form" class="chat-form" novalidate><input name="question" maxlength="120" required placeholder="輸入問題…" aria-label="輸入問題"><button type="submit" aria-label="送出問題">${icon('arrow')}</button></form>`, 'assistant-card')}</section></div>`;
+    return `${pageTitle('FAQ', '常見問題', '快速查找財務流程、規範與申請相關解答。')}
+      ${card(`<div class="card-heading"><div><h2>常見問題</h2><p>快速找到解答</p></div></div><label class="search-box full">${icon('search')}<input id="content-search" type="search" placeholder="搜尋常見問題" value="${escapeHtml(state.search)}" aria-label="搜尋常見問題"></label><div class="faq-list">${visible.length ? visible.map((item, index) => `<div class="faq-item"><button type="button" data-faq-index="${faqs.indexOf(item)}" aria-expanded="${state.faqOpen === faqs.indexOf(item)}"><span><small>${item.tag}</small><strong>${item.q}</strong></span><span class="faq-plus">${state.faqOpen === faqs.indexOf(item) ? '−' : '+'}</span></button>${state.faqOpen === faqs.indexOf(item) ? `<p>${item.a}</p>` : ''}</div>`).join('') : '<p class="empty-state">沒有找到符合的問題。</p>'}</div>`, 'faq-card faq-only-card')}`;
   }
   function mountainArt(extra = '') { return `<div class="mountain-art ${extra}" aria-hidden="true"><span class="sun"></span><span class="mountain mountain-back one"></span><span class="mountain mountain-back two"></span><span class="mountain mountain-front one"></span><span class="mountain mountain-front two"></span><span class="mountain mountain-front three"></span></div>`; }
   function employeeBanner(title, lead, detail = '', withBook = false) { return `<section class="employee-banner"><div class="banner-copy"><h1>${title}</h1><p>${lead}</p>${detail ? `<small>${detail}</small>` : ''}</div>${mountainArt()}${withBook ? `<svg class="banner-book" viewBox="0 0 225 140" aria-hidden="true"><defs><linearGradient id="bookBlue" x1="0" x2="1"><stop stop-color="#2280ff"/><stop offset="1" stop-color="#5ba4ff"/></linearGradient></defs><path d="M12 27Q60 15 112 39Q164 15 213 27v100q-54-14-101 12Q65 113 12 127z" fill="url(#bookBlue)" opacity=".94"/><path d="M27 16Q71 5 111 28v94Q70 101 27 112z" fill="#f8fbff" stroke="#98c3ff" stroke-width="3"/><path d="M197 16Q153 5 113 28v94q41-21 84-10z" fill="#f8fbff" stroke="#98c3ff" stroke-width="3"/><path d="M111 28v94" stroke="#80b7fb" stroke-width="3"/><path d="M42 39q26-4 55 10M42 57q26-4 55 10M42 75q26-4 55 10M127 48q27-13 55-9M127 66q27-13 55-9M127 84q27-13 55-9" fill="none" stroke="#c0d8fb" stroke-width="6" stroke-linecap="round"/></svg>` : ''}</section>`; }
-  function referenceServiceTiles() { return `<div class="reference-service-grid">${[['expense', '報銷申請', '差旅／交際／日常費用', 'green'], ['travel', '出差申請', '國內／國外出差', 'blue'], ['payment', '付款申請', '廠商付款／其他付款', 'pink']].map(([id, title, desc, color]) => `<button class="reference-service ${color}" type="button" data-service="${id}"><span class="service-pictogram">${icon(id === 'travel' ? 'plane' : id === 'payment' ? 'credit' : 'receipt')}</span><strong>${title}</strong><small>${desc}</small><span class="powered">Powered by Helios ${icon('chevron')}</span></button>`).join('')}</div>`; }
+  function referenceServiceTiles() { return `<div class="reference-service-grid">${[['expense', '費用報銷', '差旅／交際／日常費用申請', 'green'], ['travel', '出差申請', '國內／國際出差申請', 'blue'], ['payment', '付款申請', '對外付款申請／查詢', 'orange']].map(([id, title, desc, color]) => `<button class="reference-service ${color}" type="button" data-service="${id}"><span class="service-pictogram">${icon(id === 'travel' ? 'plane' : id === 'payment' ? 'credit' : 'receipt')}</span><strong>${title}</strong><small>${desc}</small><span class="service-go" aria-hidden="true">${icon('chevron')}</span></button>`).join('')}</div>`; }
   function referencePolicyTiles(items = [['報銷規範', '費用項目／憑證要求／核銷標準', 'green', 'receipt'], ['出差政策', '國內外出差申請／補助標準', 'blue', 'plane'], ['付款規範', '廠商付款／內部付款流程', 'orange', 'credit'], ['知識庫／操作教學', '常見問題／系統操作教學', 'purple', 'book']]) { return `<div class="reference-policy-grid">${items.map(([title, subtitle, color, ico]) => `<button class="reference-policy-tile" type="button" data-policy="${title}"><span class="tile-icon ${color}">${icon(ico)}</span><span><strong>${title}</strong><small>${subtitle}</small></span>${icon('chevron')}</button>`).join('')}</div>`; }
+  function employeeIdentityCard() {
+    return `<section class="reference-card employee-identity-card">
+      <div class="identity-heading"><div><h2>我的身分資訊</h2><span>依公司別／國家與部門顯示適用內容</span></div></div>
+      <div class="identity-grid">
+        <div class="identity-item"><span class="identity-icon">${icon('building')}</span><div><small>公司別</small><strong>${employeeContext.company}</strong></div></div>
+        <div class="identity-item"><span class="identity-icon">${icon('globe')}</span><div><small>國家／地區</small><strong>${employeeContext.country}</strong></div></div>
+        <div class="identity-item"><span class="identity-icon">${icon('users')}</span><div><small>所屬部門</small><strong>${employeeContext.department}</strong></div></div>
+      </div>
+    </section>`;
+  }
+
+  function companyFlowTiles() {
+    const items = [
+      ['Malaysia Travel Policy', 'policy'],
+      ['Malaysia Expense Policy', 'policy'],
+      ['Malaysia Corporate Card Policy', 'credit'],
+      ['Malaysia Payment Guideline', 'credit'],
+      ['Malaysia Finance Calendar', 'service']
+    ];
+    return `<div class="company-flow-grid">${items.map(([title, ico]) => `<button class="company-flow-tile" type="button" data-policy="${title}"><span class="company-flow-icon">${icon(ico)}</span><strong>${title}</strong></button>`).join('')}</div>`;
+  }
+
+  function financeScenarioCard() {
+    const items = [
+      ['發票遺失怎麼辦？', '如果發票遺失，仍可依規定申請，了解替代文件與申請方式。', 'ask', 'blue'],
+      ['費用超額如何申請說明？', '超出標準金額時的申請流程與需檢附的說明文件。', 'info', 'red'],
+      ['公司卡問題', '包含申請、額度調整、交易查詢及遺失處理等常見問題。', 'credit', 'blue'],
+      ['不知道找誰', '依申請類型找到對應的聯絡窗口與支援管道。', 'users', 'purple']
+    ];
+    return ${card(`<div class="section-title"><div><h2>常見財務情境</h2><span>快速找到解決方案</span></div><button class="link-action" data-page="faq">查看更多 ${icon('chevron')}</button></div>
+      <div class="finance-scenario-list">${items.map(([title, detail, ico, color]) => `<button type="button" data-page="faq"><span class="scenario-icon ${color}">${icon(ico)}</span><span><strong>${title}</strong><small>${detail}</small></span>${icon('chevron')}</button>`).join('')}</div>`, 'reference-card finance-scenarios')};
+  }
+
+  function financeInfoCard() {
+    const items = [
+      ['9/30 付款截止提醒', '請於 9/30 前完成付款申請，以確保本月可順利請款。', '2026/09/25', 'bell'],
+      ['10 月費用報銷截止日', '10 月所有費用報銷申請請於 10/25 前送出。', '2026/09/22', 'service'],
+      ['Helios 系統維護通知', '預計於 9/20 02:00–05:00（Malaysia Time）進行系統維護。', '2026/09/18', 'settings']
+    ];
+    return ${card(`<div class="section-title"><div><h2>財務重要資訊</h2><span>掌握最新財務公告</span></div><button class="link-action" data-page="policy">查看更多 ${icon('chevron')}</button></div>
+      <div class="finance-info-list">${items.map(([title, detail, date, ico]) => `<div class="finance-info-item"><span class="scenario-icon blue">${icon(ico)}</span><span><strong>${title}</strong><small>${detail}</small></span><time>${date}</time></div>`).join('')}</div>`, 'reference-card finance-important')};
+  }
+
+  function employeeTravelStatus() {
+    const travellers = [
+      ['AC', 'Amy Chen', 'Malaysia · Kuala Lumpur', '9/25 - 9/29'],
+      ['KL', 'Kevin Lin', 'Singapore', '9/24 - 9/28'],
+      ['LW', 'Lily Wang', 'Japan · Tokyo', '9/23 - 9/27'],
+      ['DW', 'Daniel Wu', 'Germany · Frankfurt', '9/22 - 9/30']
+    ];
+    const destinations = [
+      ['新加坡', 4, 72],
+      ['日本', 3, 57],
+      ['馬來西亞', 3, 57],
+      ['歐洲', 2, 38]
+    ];
+    return ${card(`<div class="section-title travel-title"><div><h2>人員出差狀況</h2><span>以下為您所屬公司（${employeeContext.company}）目前的員工出差概況</span></div><button class="link-action" type="button">查看完整名單 ${icon('chevron')}</button></div>
+      <div class="travel-overview">
+        <div class="travel-summary">
+          <div class="travel-metrics">
+            <div class="travel-metric"><span class="travel-metric-icon blue">${icon('plane')}</span><div><small>出差中人數</small><strong>12 <em>人</em></strong><span class="trend-up">↑ 20% <i>較上月同期</i></span></div></div>
+            <div class="travel-metric"><span class="travel-metric-icon blue">${icon('pin')}</span><div><small>涵蓋地區</small><strong>4 <em>個</em></strong><span class="trend-neutral">-- <i>本次出差涵蓋地區數</i></span></div></div>
+            <div class="travel-metric"><span class="travel-metric-icon red">${icon('info')}</span><div><small>待審批申請</small><strong>3 <em>件</em></strong><span class="trend-alert">↑ 50% <i>較上月同期</i></span></div></div>
+          </div>
+          <div class="travel-bars"><strong>出差地區分佈</strong>${destinations.map(([name, count, width]) => `<div class="travel-bar-row"><span>${name}</span><div class="travel-bar"><i style="width:${width}%"></i></div><b>${count} 人</b></div>`).join('')}</div>
+        </div>
+        <div class="traveller-panel"><div class="traveller-panel-head"><strong>目前出差員工 <small>（最近出發）</small></strong><button class="link-action" type="button">查看全部 ${icon('chevron')}</button></div>
+          <div class="traveller-list">${travellers.map(([initials, name, destination, dates]) => `<div class="traveller-row"><span class="traveller-avatar">${initials}</span><strong>${name}</strong><span>${destination}</span><time>${dates}</time><b>出差中</b></div>`).join('')}</div>
+        </div>
+      </div>`, 'reference-card employee-travel-status')};
+  }
+
   function referenceEmployeeHome() {
     const applications = loadApplications();
-    return `<div class="home-reference-grid"><div class="home-primary">
-      ${employeeBanner('早安，Evren', '歡迎使用 Finance SSC，一站式財務共享服務平台', '快速申請・查詢進度・遵循規範・取得協助')}
-      ${card(`<div class="section-title"><div><h2>常用服務</h2><span>申請各項財務服務，提升工作效率</span></div><button class="link-action" data-page="service">查看所有服務 ${icon('chevron')}</button></div>${referenceServiceTiles()}`, 'reference-card home-services')}
-      ${card(`<div class="section-title"><div><h2>我的申請</h2><span>追蹤申請進度與處理狀況</span></div><button class="link-action" data-page="applications">查看全部 ${icon('chevron')}</button></div><div class="home-status-grid">${[['in_progress', 2, 'blue', 'clock'], ['completed', 8, 'green', 'check'], ['needs_info', 1, 'red', 'info'], ['cancelled', 0, 'gray', 'policy']].map(([label, count, color, ico]) => `<div class="home-status ${color}"><span>${icon(ico)}</span><div><strong>${t(`status.${label}`)}</strong><b>${count} <small>件</small></b></div></div>`).join('')}</div>${referenceApplicationTable(applications.slice(0, 4), true)}`, 'reference-card home-applications')}
-    </div><div class="home-secondary">${card(`<div class="section-title"><h2>通知與公告</h2><button class="link-action" data-page="policy">全部 ${icon('chevron')}</button></div><div class="announcement-list">${[['9/30 財務報銷截止提醒', '請於 9/30 前完成報銷申請', '2026/09/25', 'red', 'info'], ['出差政策更新', '新增國外出差申請流程', '2026/09/20', 'blue', 'policy'], ['系統維護公告', 'Helios 系統 10/3 02:00–06:00 維護', '2026/09/18', 'red', 'bell']].map(([title, detail, date, color, ico]) => `<div class="announcement"><span class="tile-icon ${color}">${icon(ico)}</span><span><strong>${title}</strong><small>${detail}</small></span><time>${date}</time></div>`).join('')}</div>`, 'reference-card announcements')}
-      ${card(`<div class="section-title"><div class="assistant-title-icon">${icon('ask')}</div><div><h2>AI 助手</h2><span>有問題？我來協助您</span></div><button class="link-action" data-page="faq">開啟對話 ${icon('chevron')}</button></div><div class="question-list">${['如何申請報銷？', '出差申請需要準備哪些文件？', '付款申請的流程是？', '公司報銷規範有哪些？', '我可以查詢申請進度嗎？'].map(question => `<button type="button" data-question="${question}"><span>○</span>${question}${icon('chevron')}</button>`).join('')}</div>`, 'reference-card home-assistant')}</div></div>
-    ${card(`<div class="section-title"><div><h2>財務政策與規範</h2><span>各項財務管理制度與操作指引</span></div><button class="link-action" data-page="policy">查看全部 ${icon('chevron')}</button></div>${referencePolicyTiles()}`, 'reference-card home-policy')}`;
+    return `<div class="employee-home-v4">
+      <div class="home-hero-grid">
+        ${employeeBanner('早安，Evren', '歡迎使用 Finance SSC', '一站式財務服務平台')}
+        ${employeeIdentityCard()}
+      </div>
+      <div class="home-reference-grid">
+        <div class="home-primary">
+          ${card(`<div class="section-title"><div><h2>常用服務</h2><span>根據您所屬公司別（${employeeContext.company}），提供可申請的財務服務</span></div><button class="link-action" data-page="service">查看所有服務 ${icon('chevron')}</button></div>${referenceServiceTiles()}`, 'reference-card home-services')}
+          ${card(`<div class="section-title"><div><h2>常見流程文件</h2><span>您公司別的 ${employeeContext.country} 相關政策與規範</span></div><button class="link-action" data-page="policy">查看更多規範 ${icon('chevron')}</button></div>${companyFlowTiles()}`, 'reference-card home-company-flow')}
+          ${card(`<div class="section-title"><div><h2>我的申請</h2><span>查看與追蹤您送出的各項申請進度</span></div><button class="link-action" data-page="applications">查看全部申請 ${icon('chevron')}</button></div><div class="home-status-grid">${[['in_progress', 3, 'blue', 'clock'], ['completed', 12, 'green', 'check'], ['needs_info', 1, 'red', 'info'], ['cancelled', 2, 'gray', 'close']].map(([label, count, color, ico]) => `<div class="home-status ${color}"><span>${icon(ico)}</span><div><strong>${t(`status.${label}`)}</strong><b>${count} <small>件</small></b></div></div>`).join('')}</div>${referenceApplicationTable(applications.slice(0, 4), true)}`, 'reference-card home-applications')}
+          ${employeeTravelStatus()}
+        </div>
+        <div class="home-secondary">
+          ${financeScenarioCard()}
+          ${financeInfoCard()}
+        </div>
+      </div>
+    </div>`;
   }
   function referenceApplicationTable(rows, home = false) {
     return `<div class="table-scroll"><table class="reference-table"><thead><tr><th>申請單號</th><th>${home ? '申請類型' : '申請項目'}</th>${home ? '' : '<th>申請目的</th>'}<th>申請日期</th>${home ? '<th>金額</th>' : ''}<th>狀態</th>${home ? '' : '<th>預計完成日</th>'}<th>操作</th></tr></thead><tbody>${rows.map(item => `<tr><td class="reference-id">${escapeHtml(item.id)}</td><td>${escapeHtml(t(`type.${home ? (item.type === 'airfare' || item.type === 'lodging' ? 'travel' : item.type === 'vendor_payment' ? 'payment' : 'expense') : item.type}`))}</td>${home ? '' : `<td>${escapeHtml(item.title)}</td>`}<td>${escapeHtml(item.date)}</td>${home ? `<td>${escapeHtml(item.amount)}</td>` : ''}<td>${badge(item.status)}</td>${home ? '' : `<td>${item.status === 'cancelled' ? '－' : '2026/10/08'}</td>`}<td><button class="row-link" type="button" data-application="${escapeHtml(item.id)}">${home ? '查看' : '查看詳情'} ${home ? '' : icon('chevron')}</button></td></tr>`).join('')}</tbody></table></div>`;
